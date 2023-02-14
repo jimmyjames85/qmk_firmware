@@ -18,10 +18,6 @@
 #include <stdio.h>
 #include "ledindex.h"
 
-LEADER_EXTERNS();
-#define LEADER_TIMEOUT 1000
-#define LEADER_PER_KEY_TIMING // https://docs.qmk.fm/#/feature_leader_key
-
 enum custom_keycodes {
     JT_INFO = SAFE_RANGE, // create our custom key code.. start in the safe range
     JT_BOOT, // bootloader
@@ -31,6 +27,66 @@ enum custom_keycodes {
 enum {
     TD_ESC_CAPS,
 };
+
+
+
+// position in file is important
+//
+// https://github.com/qmk/qmk_firmware/blob/master/quantum/process_keycode/process_leader.h
+LEADER_EXTERNS();
+
+// TODO this is preformance sensitive area.
+//
+// This function gets called at every matrix scan, which is basically as often as the MCU can handle. Be
+// careful what you put here, as it will get run a lot.
+//
+// You should use this function if you need custom matrix scanning code. It can also be used for custom
+// status output (such as LEDs or a display) or other functionality that you want to trigger regularly
+// even when the user isn’t typing.
+//
+//
+// Runs constantly in the background, in a loop.
+void matrix_scan_user(void) {
+
+    LEADER_DICTIONARY() {
+        leading = false;
+        leader_end();
+
+        SEQ_ONE_KEY(KC_F) {
+            printf("leader then f\n");
+        }
+        SEQ_TWO_KEYS(KC_D, KC_D) {
+            printf("double Ds oh my !?!\n");
+        }
+        SEQ_THREE_KEYS(KC_J, KC_I, KC_M) {
+            printf("hi jim\n");
+        }
+    }
+
+    // // TODO: where is layer_state defined?
+    // uint8_t layer = biton32(layer_state);
+    // // turn on led that corresponds to layer
+    // switch (layer) {
+    // case 0:
+    //     rgb_matrix_set_color(LED_GRV, 255, 0, 0);
+    //     rgb_matrix_set_color(LED_P0, 255, 0, 0);
+    //     break;
+    // case 1:
+    //     rgb_matrix_set_color(LED_1, 255, 0, 0);
+    //     rgb_matrix_set_color(LED_P1, 255, 0, 0);
+    //     break;
+    // case 2:
+    //     rgb_matrix_set_color(LED_2, 255, 0, 0);
+    //     rgb_matrix_set_color(LED_P2, 255, 0, 0);
+    //     break;
+    // case 3:
+    //     rgb_matrix_set_color(LED_P3, 255, 0, 0);
+    //     rgb_matrix_set_color(LED_3, 255, 0, 0);
+    //     break;
+    // }
+};
+
+
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // key counts top row to btm 20, 21, 20, 17, 16, 14
@@ -114,9 +170,6 @@ void suspend_wakeup_init_user(void) {}
 // gets called after keyboard reboots?
 void keyboard_post_init_user(void) {}
 
-
-#define DYNAMIC_MACRO_NO_NESTING
-
 // Triggered when you start recording a macro
 void dynamic_macro_record_start_user(void){
     printf("macro start\n");
@@ -182,15 +235,30 @@ void tap_dance(qk_tap_dance_state_t *state, void *user_data) {
     }
 }
 
+void printKC(int kc) {
+
+
+    switch (kc) {
+    case KC_A ... KC_Z:
+        printf("%-16c: ", ('a'-4+kc));
+        return;
+    case KC_SPACE:
+        printf("%-16s: ", "<KC_SPACE>");
+        return;
+    }
+    printf("%-16s: ", "< ? >");
+}
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
-	// uint16_t macro_kc = (keycode == MO(_DYN) ? DM_RSTP : keycode);
-	// if (!process_record_dynamic_macro(macro_kc, record)) {
-	// 	return false;
-	// }
+    // uint16_t macro_kc = (keycode == MO(_DYN) ? DM_RSTP : keycode);
+    // if (!process_record_dynamic_macro(macro_kc, record)) {
+    // 	return false;
+    // }
 
 
-
+    printKC(keycode);
     printf("kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
            keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 
@@ -244,52 +312,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 
-
-// TODO this is preformance sensitive area.
-//
-// This function gets called at every matrix scan, which is basically as often as the MCU can handle. Be
-// careful what you put here, as it will get run a lot.
-//
-// You should use this function if you need custom matrix scanning code. It can also be used for custom
-// status output (such as LEDs or a display) or other functionality that you want to trigger regularly
-// even when the user isn’t typing.
-//
-//
-// Runs constantly in the background, in a loop.
-void matrix_scan_user(void) {
-
-    LEADER_DICTIONARY() {
-        leading = false;
-        leader_end();
-
-        SEQ_ONE_KEY(KC_F) { printf("leader then f\n");}
-        SEQ_TWO_KEYS(KC_D, KC_D) { printf("double Ds oh my !?!\n");}
-        SEQ_THREE_KEYS(KC_J, KC_I, KC_M) { printf("hi jim\n");}
-    }
-
-
-    // // TODO: where is layer_state defined?
-    // uint8_t layer = biton32(layer_state);
-    // // turn on led that corresponds to layer
-    // switch (layer) {
-    // case 0:
-    //     rgb_matrix_set_color(LED_GRV, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_P0, 255, 0, 0);
-    //     break;
-    // case 1:
-    //     rgb_matrix_set_color(LED_1, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_P1, 255, 0, 0);
-    //     break;
-    // case 2:
-    //     rgb_matrix_set_color(LED_2, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_P2, 255, 0, 0);
-    //     break;
-    // case 3:
-    //     rgb_matrix_set_color(LED_P3, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_3, 255, 0, 0);
-    //     break;
-    // }
-};
 
 
 // Tap Dance definitions

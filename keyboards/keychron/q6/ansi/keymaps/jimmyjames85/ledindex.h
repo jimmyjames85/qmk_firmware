@@ -1,109 +1,109 @@
-
-const uint8_t LED_ESC = 0;
-const uint8_t LED_F1 = 1;
-const uint8_t LED_F2 = 2;
-const uint8_t LED_F3 = 3;
-const uint8_t LED_F4 = 4;
-const uint8_t LED_F5 = 5;
-const uint8_t LED_F6 = 6;
-const uint8_t LED_F7 = 7;
-const uint8_t LED_F8 = 8;
-const uint8_t LED_F9 = 9;
-const uint8_t LED_F10 = 10;
-const uint8_t LED_F11 = 11;
-const uint8_t LED_F12 = 12;
-const uint8_t LED_PSCR = 13;
-const uint8_t LED_SCRL = 14;
-const uint8_t LED_PAUS = 15;
-const uint8_t LED_CIRC = 16;
-const uint8_t LED_TRIANGLE = 17;
-const uint8_t LED_SQUARE = 18;
-const uint8_t LED_XXX = 19;
-const uint8_t LED_GRV = 20;
-const uint8_t LED_1 = 21;
-const uint8_t LED_2 = 22;
-const uint8_t LED_3 = 23;
-const uint8_t LED_4 = 24;
-const uint8_t LED_5 = 25;
-const uint8_t LED_6 = 26;
-const uint8_t LED_7 = 27;
-const uint8_t LED_8 = 28;
-const uint8_t LED_9 = 29;
-const uint8_t LED_0 = 30;
-const uint8_t LED_MINS = 31;
-const uint8_t LED_EQL = 32;
-const uint8_t LED_BSPC = 33;
-const uint8_t LED_INS = 34;
-const uint8_t LED_HOME = 35;
-const uint8_t LED_PGUP = 36;
-const uint8_t LED_NUM = 37;
-const uint8_t LED_PSLS = 38;
-const uint8_t LED_PAST = 39;
-const uint8_t LED_PMNS = 40;
-const uint8_t LED_TAB = 41;
-const uint8_t LED_Q = 42;
-const uint8_t LED_W = 43;
-const uint8_t LED_E = 44;
-const uint8_t LED_R = 45;
-const uint8_t LED_T = 46;
-const uint8_t LED_Y = 47;
-const uint8_t LED_U = 48;
-const uint8_t LED_I = 49;
-const uint8_t LED_O = 50;
-const uint8_t LED_P = 51;
-const uint8_t LED_LBRC = 52;
-const uint8_t LED_RBRC = 53;
-const uint8_t LED_BSLS = 54;
-const uint8_t LED_DEL = 55;
-const uint8_t LED_END = 56;
-const uint8_t LED_PGDN = 57;
-const uint8_t LED_P7 = 58;
-const uint8_t LED_P8 = 59;
-const uint8_t LED_P9 = 60;
-const uint8_t LED_CAPS = 61;
-const uint8_t LED_A = 62;
-const uint8_t LED_S = 63;
-const uint8_t LED_D = 64;
-const uint8_t LED_F = 65;
-const uint8_t LED_G = 66;
-const uint8_t LED_H = 67;
-const uint8_t LED_J = 68;
-const uint8_t LED_K = 69;
-const uint8_t LED_L = 70;
-const uint8_t LED_SCLN = 71;
-const uint8_t LED_QUOT = 72;
-const uint8_t LED_ENT = 73;
-const uint8_t LED_P4 = 74;
-const uint8_t LED_P5 = 75;
-const uint8_t LED_P6 = 76;
-const uint8_t LED_PPLS = 77;
-const uint8_t LED_LSFT = 78;
-const uint8_t LED_Z = 79;
-const uint8_t LED_X = 80;
-const uint8_t LED_C = 81;
-const uint8_t LED_V = 82;
-const uint8_t LED_B = 83;
-const uint8_t LED_N = 84;
-const uint8_t LED_M = 85;
-const uint8_t LED_COMM = 86;
-const uint8_t LED_DOT = 87;
-const uint8_t LED_SLSH = 88;
-const uint8_t LED_RSFT = 89;
-const uint8_t LED_UP = 90;
-const uint8_t LED_P1 = 91;
-const uint8_t LED_P2 = 92;
-const uint8_t LED_P3 = 93;
-const uint8_t LED_LCTL = 94;
-const uint8_t LED_LGUI = 95;
-const uint8_t LED_LALT = 96;
-const uint8_t LED_SPC = 97;
-const uint8_t LED_RALT = 98;
-const uint8_t LED_RGUI = 99;
-const uint8_t LED_APP = 100;
-const uint8_t LED_RCTL = 101;
-const uint8_t LED_LEFT = 102;
-const uint8_t LED_DOWN = 103;
-const uint8_t LED_RGHT = 104;
-const uint8_t LED_P0 = 105;
-const uint8_t LED_PDOT = 106;
-const uint8_t LED_PENT = 107;
+// TODO convert to C MACRO or use #define predirectives
+#define LED_ESC 0
+#define LED_F1 1
+#define LED_F2 2
+#define LED_F3 3
+#define LED_F4 4
+#define LED_F5 5
+#define LED_F6 6
+#define LED_F7 7
+#define LED_F8 8
+#define LED_F9 9
+#define LED_F10 10
+#define LED_F11 11
+#define LED_F12 12
+#define LED_PSCR 13
+#define LED_SCRL 14
+#define LED_PAUS 15
+#define LED_CIRC 16
+#define LED_TRIANGLE 17
+#define LED_SQUARE 18
+#define LED_XXX 19
+#define LED_GRV 20
+#define LED_1 21
+#define LED_2 22
+#define LED_3 23
+#define LED_4 24
+#define LED_5 25
+#define LED_6 26
+#define LED_7 27
+#define LED_8 28
+#define LED_9 29
+#define LED_0 30
+#define LED_MINS 31
+#define LED_EQL 32
+#define LED_BSPC 33
+#define LED_INS 34
+#define LED_HOME 35
+#define LED_PGUP 36
+#define LED_NUM 37
+#define LED_PSLS 38
+#define LED_PAST 39
+#define LED_PMNS 40
+#define LED_TAB 41
+#define LED_Q 42
+#define LED_W 43
+#define LED_E 44
+#define LED_R 45
+#define LED_T 46
+#define LED_Y 47
+#define LED_U 48
+#define LED_I 49
+#define LED_O 50
+#define LED_P 51
+#define LED_LBRC 52
+#define LED_RBRC 53
+#define LED_BSLS 54
+#define LED_DEL 55
+#define LED_END 56
+#define LED_PGDN 57
+#define LED_P7 58
+#define LED_P8 59
+#define LED_P9 60
+#define LED_CAPS 61
+#define LED_A 62
+#define LED_S 63
+#define LED_D 64
+#define LED_F 65
+#define LED_G 66
+#define LED_H 67
+#define LED_J 68
+#define LED_K 69
+#define LED_L 70
+#define LED_SCLN 71
+#define LED_QUOT 72
+#define LED_ENT 73
+#define LED_P4 74
+#define LED_P5 75
+#define LED_P6 76
+#define LED_PPLS 77
+#define LED_LSFT 78
+#define LED_Z 79
+#define LED_X 80
+#define LED_C 81
+#define LED_V 82
+#define LED_B 83
+#define LED_N 84
+#define LED_M 85
+#define LED_COMM 86
+#define LED_DOT 87
+#define LED_SLSH 88
+#define LED_RSFT 89
+#define LED_UP 90
+#define LED_P1 91
+#define LED_P2 92
+#define LED_P3 93
+#define LED_LCTL 94
+#define LED_LGUI 95
+#define LED_LALT 96
+#define LED_SPC 97
+#define LED_RALT 98
+#define LED_RGUI 99
+#define LED_APP 100
+#define LED_RCTL 101
+#define LED_LEFT 102
+#define LED_DOWN 103
+#define LED_RGHT 104
+#define LED_P0 105
+#define LED_PDOT 106
+#define LED_PENT 107
