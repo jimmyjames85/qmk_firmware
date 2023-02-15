@@ -21,12 +21,16 @@
 enum custom_keycodes {
     JT_INFO = SAFE_RANGE, // create our custom key code.. start in the safe range
     JT_BOOT, // bootloader
+    JT_BL_O2S // blender origin to selected  ... be in edit mode, select a face, run this macro
 };
 
 // Tap Dance declarations
 enum {
     TD_ESC_CAPS,
 };
+
+
+
 
 
 // DM_REC1    = QK_DYNAMIC_MACRO_RECORD_START_1
@@ -73,40 +77,64 @@ void matrix_scan_user(void) {
     }
 
 
+    uint16_t leds[10]= { LED_P0, LED_P1, LED_P2,
+                         LED_P3, LED_P4, LED_P5,
+                         LED_P6, LED_P7, LED_P8,
+                         LED_P9
+    };
+    int size = sizeof(leds)/sizeof(leds[0]) ;
+
+
     // handle layer change elsewhere?
 
     // TODO: where is layer_state defined?
     uint8_t layer = biton32(layer_state);
-    uint8_t r, g, b;
+
     // turn on led that corresponds to layer
     switch (layer) {
     case 0:
-        r=0; g=0; b=0; break;
+
+        for ( int i=0; i<size; i++ ){
+            rgb_matrix_set_color(leds[i], RGB_BLUE);
+        }
+        break;
     case 1:
-        r=127; g=255; b=127; break;
+        for ( int i=0; i<size; i++ ){
+            rgb_matrix_set_color(leds[i], RGB_GREEN);
+        }
+        break;
     case 2:
-        r=0; g=255; b=0; break;
+        for ( int i=0; i<size; i++ ){
+            rgb_matrix_set_color(leds[i], RGB_PINK);
+        }
+        break;
     case 3:
-        r=0; g=0; b=255; break;
+        for ( int i=0; i<size; i++ ){
+            rgb_matrix_set_color(leds[i], RGB_GOLD);
+        }
+        break;
     }
 
-    rgb_matrix_set_color(LED_P0, r, g, b);
-    rgb_matrix_set_color(LED_P1, r, g, b);
-    rgb_matrix_set_color(LED_P2, r, g, b);
-    rgb_matrix_set_color(LED_P3, r, g, b);
-    rgb_matrix_set_color(LED_P4, r, g, b);
-    rgb_matrix_set_color(LED_P5, r, g, b);
-    rgb_matrix_set_color(LED_P6, r, g, b);
-    rgb_matrix_set_color(LED_P7, r, g, b);
-    rgb_matrix_set_color(LED_P8, r, g, b);
-    rgb_matrix_set_color(LED_P9, r, g, b);
+
+
+
+
+
+
 };
 
 
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // key counts top row to btm 20, 21, 20, 17, 16, 14
-    ///////////////////////////////// Layer 0 /////////////////////////////////
+
+    // select/copy a layer and run this is terminal to verify length of array is equal to 108
+    //
+    // pbpaste | tr "\n" " " | tr "," "\n"  | wc -l
+    // 108
+
+
+    // Layer 0
     [0] = LAYOUT_ansi_108(
                           TD(TD_ESC_CAPS),            KC_F1,       KC_F2,        KC_F3,       KC_F4,                  KC_F5,       KC_F6,       KC_F7,       KC_F8,             KC_F9,       KC_F10,      KC_F11,      KC_F12,           KC_PSCR,     KC_SCRL,     KC_PAUS,           OSL(1),      KC_VOLD,     KC_VOLU,     QK_LEAD,
 
@@ -116,9 +144,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_LSFT,              KC_Z,        KC_X,        KC_C,        KC_V,        KC_B,        KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,                                KC_RSFT,                        KC_UP,                          KC_P1,       KC_P2,       KC_P3,
                           KC_LCTL,   KC_LGUI,     KC_LALT,         /****************************/ KC_SPC, /*************************/        KC_RCTL,             KC_RALT,             KC_APP,               KC_RCTL,           KC_LEFT,     KC_DOWN,     KC_RGHT,           KC_P0,       KC_PDOT,     KC_PENT),
 
-    ///////////////////////////////// Layer 1 /////////////////////////////////
+    // Layer 1
     [1] = LAYOUT_ansi_108(
-                          JT_BOOT,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
+                          JT_BOOT,         JT_BL_O2S,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
 
                           TO(0),          TO(1),       TO(2),       TO(3),       KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           BL_TOGG,     BL_ON,       RGB_RMOD,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           RGB_M_R,     BL_OFF,      RGB_MOD,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -126,9 +154,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_TRNS,              KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                                KC_TRNS,                        KC_TRNS,                        KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           RGB_M_P,     KC_TRNS,     KC_TRNS),
 
-     ///////////////////////////////// Layer 2 /////////////////////////////////
+    // Layer 2
     [2] = LAYOUT_ansi_108(
-                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     DM_PLY1,     DM_REC1,     TO(0),
+                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     DM_PLY1,     DM_REC1,     TO(0),
 
                           KC_TRNS,        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -136,15 +164,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_TRNS,              KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                                KC_TRNS,                        KC_TRNS,                        KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS),
 
-    ///////////////////////////////// Layer 3 /////////////////////////////////
+    // Layer 3
     [3] = LAYOUT_ansi_108(
-                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           OSL(1),      KC_TRNS,     KC_TRNS,     TO(0),
+                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
 
                           KC_TRNS,        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,            KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                     KC_TRNS,                                                        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,              KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                                KC_TRNS,                        KC_TRNS,                        KC_TRNS,     KC_TRNS,     KC_TRNS,
-                          KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS)
+                          KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS),
 };
 
 
@@ -234,7 +262,7 @@ void tap_dance(qk_tap_dance_state_t *state, void *user_data) {
         return;
     case 1:
         // register_code(KC_ESC); // keydown
-        // register_code(KC_ESC); // keyup
+        // unregister_code(KC_ESC); // keyup
         tap_code(KC_ESC); // send keydown and keyup
         return;
     case 2:
@@ -264,6 +292,33 @@ void printKC(int kc) {
 }
 
 
+void jtbl_originToSelected(void) {
+    // Cursor to Selected
+    // Shift+S, U
+    register_code(KC_LSFT);
+    tap_code(KC_S);
+    unregister_code(KC_LSFT);
+    tap_code(KC_U);
+
+    // Exit edit mode
+    // Tab
+    tap_code(KC_TAB);
+
+    // "Set Origin" Menu
+    // Ctrl+Alt+Shift+C
+    register_code(KC_LCTL);
+    register_code(KC_LALT);
+    register_code(KC_LSFT);
+    tap_code(KC_C);
+    unregister_code(KC_LCTL);
+    unregister_code(KC_LALT);
+    unregister_code(KC_LSFT);
+
+    // Set Origin to 3D Cursor
+    // T
+    tap_code(KC_T);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     // uint16_t macro_kc = (keycode == MO(_DYN) ? DM_RSTP : keycode);
@@ -283,6 +338,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         rgb_matrix_set_color_all(0, 0, 0);
 
         return false; // return false to stop qmk from further processing
+
+    case JT_BL_O2S:
+        if(record->event.pressed) { // only once on key down
+            jtbl_originToSelected();
+        }
+
+        return false;
     case JT_BOOT:
         mods = get_mods();
         // ctrl + alt + shift is required
