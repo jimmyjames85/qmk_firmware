@@ -29,6 +29,15 @@ enum {
 };
 
 
+// DM_REC1    = QK_DYNAMIC_MACRO_RECORD_START_1
+// DM_REC2    = QK_DYNAMIC_MACRO_RECORD_START_2
+// DM_RSTP    = QK_DYNAMIC_MACRO_RECORD_STOP      can also press DM_PLY1 to stop as well
+// DM_PLY1    = QK_DYNAMIC_MACRO_PLAY_1
+// DM_PLY2    = QK_DYNAMIC_MACRO_PLAY_2
+//
+
+
+// KC_CODES are uint16_t
 
 // position in file is important
 //
@@ -63,27 +72,34 @@ void matrix_scan_user(void) {
         }
     }
 
-    // // TODO: where is layer_state defined?
-    // uint8_t layer = biton32(layer_state);
-    // // turn on led that corresponds to layer
-    // switch (layer) {
-    // case 0:
-    //     rgb_matrix_set_color(LED_GRV, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_P0, 255, 0, 0);
-    //     break;
-    // case 1:
-    //     rgb_matrix_set_color(LED_1, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_P1, 255, 0, 0);
-    //     break;
-    // case 2:
-    //     rgb_matrix_set_color(LED_2, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_P2, 255, 0, 0);
-    //     break;
-    // case 3:
-    //     rgb_matrix_set_color(LED_P3, 255, 0, 0);
-    //     rgb_matrix_set_color(LED_3, 255, 0, 0);
-    //     break;
-    // }
+
+    // handle layer change elsewhere?
+
+    // TODO: where is layer_state defined?
+    uint8_t layer = biton32(layer_state);
+    uint8_t r, g, b;
+    // turn on led that corresponds to layer
+    switch (layer) {
+    case 0:
+        r=0; g=0; b=0; break;
+    case 1:
+        r=127; g=255; b=127; break;
+    case 2:
+        r=0; g=255; b=0; break;
+    case 3:
+        r=0; g=0; b=255; break;
+    }
+
+    rgb_matrix_set_color(LED_P0, r, g, b);
+    rgb_matrix_set_color(LED_P1, r, g, b);
+    rgb_matrix_set_color(LED_P2, r, g, b);
+    rgb_matrix_set_color(LED_P3, r, g, b);
+    rgb_matrix_set_color(LED_P4, r, g, b);
+    rgb_matrix_set_color(LED_P5, r, g, b);
+    rgb_matrix_set_color(LED_P6, r, g, b);
+    rgb_matrix_set_color(LED_P7, r, g, b);
+    rgb_matrix_set_color(LED_P8, r, g, b);
+    rgb_matrix_set_color(LED_P9, r, g, b);
 };
 
 
@@ -102,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     ///////////////////////////////// Layer 1 /////////////////////////////////
     [1] = LAYOUT_ansi_108(
-                          JT_BOOT,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     KC_TRNS,     KC_TRNS,     JT_INFO,
+                          JT_BOOT,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
 
                           TO(0),          TO(1),       TO(2),       TO(3),       KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           BL_TOGG,     BL_ON,       RGB_RMOD,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           RGB_M_R,     BL_OFF,      RGB_MOD,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -110,9 +126,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_TRNS,              KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                                KC_TRNS,                        KC_TRNS,                        KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           RGB_M_P,     KC_TRNS,     KC_TRNS),
 
-    ///////////////////////////////// Layer 2 /////////////////////////////////
+     ///////////////////////////////// Layer 2 /////////////////////////////////
     [2] = LAYOUT_ansi_108(
-                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           OSL(1),      KC_TRNS,     KC_TRNS,     KC_P2,
+                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     DM_PLY1,     DM_REC1,     TO(0),
 
                           KC_TRNS,        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -122,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     ///////////////////////////////// Layer 3 /////////////////////////////////
     [3] = LAYOUT_ansi_108(
-                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           OSL(1),      KC_TRNS,     KC_TRNS,     KC_P3,
+                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           OSL(1),      KC_TRNS,     KC_TRNS,     TO(0),
 
                           KC_TRNS,        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -193,8 +209,6 @@ void dynamic_macro_record_key_user(int8_t direction, keyrecord_t *record) {
 void dynamic_macro_record_end_user(int8_t direction) {
     printf("macro stop: %d\n", direction);
 }
-
-
 
 // leader key sequence started
 void leader_start(void) {
