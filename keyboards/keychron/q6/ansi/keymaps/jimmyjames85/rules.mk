@@ -10,7 +10,8 @@ CONSOLE_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 
 # https://docs.qmk.fm/#/feature_dynamic_macros?id=dynamic-macros-record-and-replay-macros-in-runtime
-DYNAMIC_MACRO_ENABLE = yes
+# DOES NOT WORK don't include it
+DYNAMIC_MACRO_ENABLE = no
 
 # https://docs.qmk.fm/#/feature_leader_key
 LEADER_ENABLE = yes

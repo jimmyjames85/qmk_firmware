@@ -30,12 +30,6 @@ enum {
 };
 
 
-// DM_REC1    = QK_DYNAMIC_MACRO_RECORD_START_1
-// DM_REC2    = QK_DYNAMIC_MACRO_RECORD_START_2
-// DM_RSTP    = QK_DYNAMIC_MACRO_RECORD_STOP      can also press DM_PLY1 to stop as well
-// DM_PLY1    = QK_DYNAMIC_MACRO_PLAY_1
-// DM_PLY2    = QK_DYNAMIC_MACRO_PLAY_2
-//
 
 
 // KC_CODES are uint16_t
@@ -130,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Layer 0 - Green
     [0] = LAYOUT_ansi_108(
-                          TD(TD_ESC_CAPS),            KC_F1,       KC_F2,        KC_F3,       KC_F4,                  KC_F5,       KC_F6,       KC_F7,       KC_F8,             KC_F9,       KC_F10,      KC_F11,      KC_F12,           KC_PSCR,     KC_SCRL,     KC_PAUS,           OSL(1),      KC_VOLD,     KC_VOLU,     QK_LEAD,
+                          TD(TD_ESC_CAPS),            KC_F1,       KC_F2,        KC_F3,       KC_F4,                KC_F5,    KC_F6,      KC_F7,       KC_F8,             KC_F9,       KC_F10,      KC_F11,   KC_F12,           KC_PSCR,     KC_SCRL,     KC_PAUS,           OSL(1),      KC_VOLD,     KC_VOLU,     QK_LEAD,
 
                           KC_GRV,         KC_1,        KC_2,        KC_3,        KC_4,        KC_5,        KC_6,        KC_7,        KC_8,        KC_9,        KC_0,       KC_MINS,     KC_EQL,              KC_BSPC,           KC_INS,      KC_HOME,     KC_PGUP,           KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,
                           KC_TAB,           KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,        KC_Y,        KC_U,        KC_I,        KC_O,        KC_P,        KC_LBRC,     KC_RBRC,          KC_BSLS,           KC_DEL,      KC_END,      KC_PGDN,           KC_P7,       KC_P8,       KC_P9,
@@ -140,17 +134,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Layer 1 - Blue
     [1] = LAYOUT_ansi_108(
-                          JT_BOOT,         JT_BL_O2S,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
+                          JT_BOOT,         JT_BL_O2S,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
 
-                          TO(0),          TO(1),       TO(2),       TO(3),       KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           BL_TOGG,     BL_ON,       RGB_RMOD,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
-                          KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           RGB_M_R,     BL_OFF,      RGB_MOD,           KC_TRNS,     KC_TRNS,     KC_TRNS,
+                          TO(0),          TO(1),       TO(2),       TO(3),       KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
+                          KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,            KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                     KC_TRNS,                                                        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,              KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                                KC_TRNS,                        KC_TRNS,                        KC_TRNS,     KC_TRNS,     KC_TRNS,
-                          KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           RGB_M_P,     KC_TRNS,     KC_TRNS),
+                          KC_TRNS,    KC_TRNS,    KC_TRNS,         /****************************/ KC_TRNS, /*************************/       KC_TRNS,             KC_TRNS,            KC_TRNS,               KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS),
 
     // Layer 2
     [2] = LAYOUT_ansi_108(
-                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     DM_PLY1,     DM_REC1,     TO(0),
+                          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
 
                           KC_TRNS,        KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -217,30 +211,6 @@ void suspend_wakeup_init_user(void) {
 void keyboard_post_init_user(void) {
     printf("keyboard_post_init_user\n");
     init_state();
-}
-
-// Triggered when you start recording a macro
-void dynamic_macro_record_start_user(void){
-    printf("macro start\n");
-};
-
-// Triggered when you play back a macro.
-void dynamic_macro_play_user(int8_t direction) {
-    printf("macro play: %d\n", direction);
-}
-
-// Triggered on each keypress while recording a macro.
-//
-// DOES NOT WORK : (
-void dynamic_macro_record_key_user(int8_t direction, keyrecord_t *record) {
-    printf("record_key: %d\n", direction);
-    // printf("recording(%d) col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
-    //        direction, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
-}
-
-// Triggered when the macro recording is stopped.
-void dynamic_macro_record_end_user(int8_t direction) {
-    printf("macro stop: %d\n", direction);
 }
 
 // leader key sequence started
@@ -322,12 +292,6 @@ void jtbl_originToSelected(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-    // uint16_t macro_kc = (keycode == MO(_DYN) ? DM_RSTP : keycode);
-    // if (!process_record_dynamic_macro(macro_kc, record)) {
-    // 	return false;
-    // }
-
     printKC(keycode);
     printf("kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
            keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
@@ -391,3 +355,5 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 
 
 // TODO - dynamic macros - https://docs.qmk.fm/#/feature_dynamic_macros?id=dynamic-macros-record-and-replay-macros-in-runtime
+// this ^^^ switches layers ugh...
+// TODO implement dyn macros yourself

@@ -8,6 +8,3 @@
 
 #undef LEADER_PER_KEY_TIMING // https://docs.qmk.fm/#/feature_leader_key
 #define LEADER_PER_KEY_TIMING // https://docs.qmk.fm/#/feature_leader_key
-
-
-#define DYNAMIC_MACRO_NO_NESTING
