@@ -14,3 +14,7 @@ DYNAMIC_MACRO_ENABLE = yes
 
 # https://docs.qmk.fm/#/feature_leader_key
 LEADER_ENABLE = yes
+
+# disable rgb lighting effects and just rely on rgb_matrix calls
+RGBLIGHT_ENABLE = no
+RGB_MATRIX_ENABLE = yes

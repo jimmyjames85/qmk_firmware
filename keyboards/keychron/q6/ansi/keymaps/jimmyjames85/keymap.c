@@ -30,9 +30,6 @@ enum {
 };
 
 
-
-
-
 // DM_REC1    = QK_DYNAMIC_MACRO_RECORD_START_1
 // DM_REC2    = QK_DYNAMIC_MACRO_RECORD_START_2
 // DM_RSTP    = QK_DYNAMIC_MACRO_RECORD_STOP      can also press DM_PLY1 to stop as well
@@ -65,8 +62,11 @@ void matrix_scan_user(void) {
         leading = false;
         leader_end();
 
-        SEQ_ONE_KEY(KC_F) {
-            printf("leader then f\n");
+        SEQ_THREE_KEYS(KC_Q, KC_M, KC_K) {
+            SEND_STRING("https://github.com/qmk/qmk_firmware/blob/master/docs");
+        }
+        SEQ_TWO_KEYS(KC_F, KC_M) {
+            SEND_STRING("https://docs.qmk.fm/#/newbs");
         }
         SEQ_TWO_KEYS(KC_D, KC_D) {
             printf("double Ds oh my !?!\n");
@@ -75,7 +75,6 @@ void matrix_scan_user(void) {
             printf("hi jim\n");
         }
     }
-
 
     uint16_t leds[10]= { LED_P0, LED_P1, LED_P2,
                          LED_P3, LED_P4, LED_P5,
@@ -95,32 +94,27 @@ void matrix_scan_user(void) {
     case 0:
 
         for ( int i=0; i<size; i++ ){
-            rgb_matrix_set_color(leds[i], RGB_BLUE);
+            rgb_matrix_set_color(leds[i], RGB_GREEN);
         }
         break;
     case 1:
         for ( int i=0; i<size; i++ ){
-            rgb_matrix_set_color(leds[i], RGB_GREEN);
+            rgb_matrix_set_color(leds[i], RGB_BLUE);
         }
         break;
     case 2:
         for ( int i=0; i<size; i++ ){
-            rgb_matrix_set_color(leds[i], RGB_PINK);
+            rgb_matrix_set_color(leds[i], RGB_MAGENTA);
         }
         break;
     case 3:
         for ( int i=0; i<size; i++ ){
-            rgb_matrix_set_color(leds[i], RGB_GOLD);
+            rgb_matrix_set_color(leds[i], RGB_CYAN);
         }
         break;
+    default:
+        break;
     }
-
-
-
-
-
-
-
 };
 
 
@@ -134,7 +128,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 108
 
 
-    // Layer 0
+    // Layer 0 - Green
     [0] = LAYOUT_ansi_108(
                           TD(TD_ESC_CAPS),            KC_F1,       KC_F2,        KC_F3,       KC_F4,                  KC_F5,       KC_F6,       KC_F7,       KC_F8,             KC_F9,       KC_F10,      KC_F11,      KC_F12,           KC_PSCR,     KC_SCRL,     KC_PAUS,           OSL(1),      KC_VOLD,     KC_VOLU,     QK_LEAD,
 
@@ -144,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_LSFT,              KC_Z,        KC_X,        KC_C,        KC_V,        KC_B,        KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,                                KC_RSFT,                        KC_UP,                          KC_P1,       KC_P2,       KC_P3,
                           KC_LCTL,   KC_LGUI,     KC_LALT,         /****************************/ KC_SPC, /*************************/        KC_RCTL,             KC_RALT,             KC_APP,               KC_RCTL,           KC_LEFT,     KC_DOWN,     KC_RGHT,           KC_P0,       KC_PDOT,     KC_PENT),
 
-    // Layer 1
+    // Layer 1 - Blue
     [1] = LAYOUT_ansi_108(
                           JT_BOOT,         JT_BL_O2S,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     RGB_TOG,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
 
@@ -179,17 +173,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 
 
-// All deferred executor callbacks have a common function signature and look like:
-uint32_t cb_ledgreen(uint32_t trigger_time, void *cb_arg) {
-    rgb_matrix_set_color(LED_8, 0, 255, 0);
-    // return 500; // means come back and call me again in 500ms
-    return 0; // means we are done
-}
-
 
 uint32_t cb_bootloader(uint32_t trigger_time, void *cb_arg) {
     reset_keyboard();
-    return 0;
+    return 0; // means we are done
+    // I think return 33; means call me again in 33ms
+
+    // All deferred executor callbacks have a common function signature and look like:
 }
 
 // all qmk callbacks have a _user() or _kb() suffix
@@ -208,11 +198,26 @@ void housekeeping_task_user(void) {}
 // code will run multiple times while keyboard is suspended
 void suspend_power_down_user(void) {}
 
+void init_state(void) {
+    printf("init\n");
+    rgb_matrix_set_color_all(0, 0, 0);
+    //    these should be in rules.mk
+    // RGBLIGHT_ENABLE = no
+    // RGB_MATRIX_ENABLE = yes
+    // TODO verify these settings?
+}
+
 // code will run on keyboard wakeup
-void suspend_wakeup_init_user(void) {}
+void suspend_wakeup_init_user(void) {
+    printf("suspend_wakeup_init_user\n");
+    init_state();
+}
 
 // gets called after keyboard reboots?
-void keyboard_post_init_user(void) {}
+void keyboard_post_init_user(void) {
+    printf("keyboard_post_init_user\n");
+    init_state();
+}
 
 // Triggered when you start recording a macro
 void dynamic_macro_record_start_user(void){
@@ -240,7 +245,8 @@ void dynamic_macro_record_end_user(int8_t direction) {
 
 // leader key sequence started
 void leader_start(void) {
-    rgb_matrix_set_color_all(0, 255, 255);
+    // TODO detect leader key key code?
+    rgb_matrix_set_color_all(0, 255, 0);
     printf("leader key: START\n");
 }
 
@@ -261,11 +267,10 @@ void tap_dance(qk_tap_dance_state_t *state, void *user_data) {
         rgb_matrix_set_color(LED_8, 0, 0, 0);
         return;
     case 1:
-        // register_code(KC_ESC); // keydown
-        // unregister_code(KC_ESC); // keyup
         tap_code(KC_ESC); // send keydown and keyup
         return;
     case 2:
+        printf("mode: %d\n", rgb_matrix_get_mode());
         rgb_matrix_set_color(LED_8, 255, 0, 0);
         return;
     case 3:
@@ -278,8 +283,6 @@ void tap_dance(qk_tap_dance_state_t *state, void *user_data) {
 }
 
 void printKC(int kc) {
-
-
     switch (kc) {
     case KC_A ... KC_Z:
         printf("%-16c: ", ('a'-4+kc));
@@ -290,7 +293,6 @@ void printKC(int kc) {
     }
     printf("%-16s: ", "< ? >");
 }
-
 
 void jtbl_originToSelected(void) {
     // Cursor to Selected
@@ -326,7 +328,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // 	return false;
     // }
 
-
     printKC(keycode);
     printf("kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
            keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
@@ -335,10 +336,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
     case JT_INFO:
-        rgb_matrix_set_color_all(0, 0, 0);
-
+        printf("JT_INFO\n");
+        // rgb_matrix_set_color_all(0, 0, 0);
         return false; // return false to stop qmk from further processing
-
     case JT_BL_O2S:
         if(record->event.pressed) { // only once on key down
             jtbl_originToSelected();
@@ -346,6 +346,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
         return false;
     case JT_BOOT:
+        // TODO verify layer?
         mods = get_mods();
         // ctrl + alt + shift is required
         mods &= get_mods() && ( MOD_BIT(KC_LCTL)
@@ -364,31 +365,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     case TD(TD_ESC_CAPS):
         printf("%d: %d\n", record->tap.interrupted, record->tap.count);
-        return true;
-    case KC_8:
-        rgb_matrix_set_color_all(120, 120, 120);
-        rgb_matrix_set_color(LED_8, 0, 0, 0);
-        // deferred_token my_token;
-        defer_exec(1500, cb_ledgreen, NULL);
-
-
         // char abuff[48];
         // sprintf(abuff, "\rkc: %04d led: %04d", keycode, RGB_MATRIX_LED_COUNT);
         // send_string(abuff) // this works
         // SEND_STRING(abuff) // this does not work
-
         return true; // let qmk process the key
-        break;
+    default:
+        return true;
     }
 
     return true;
 };
-
-
-
-
-
-
 
 // Tap Dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
