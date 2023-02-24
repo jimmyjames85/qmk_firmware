@@ -17,11 +17,15 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include "ledindex.h"
+#include "macro.h"
 
 enum custom_keycodes {
     JT_INFO = SAFE_RANGE, // create our custom key code.. start in the safe range
     JT_BOOT, // bootloader
-    JT_BL_O2S // blender origin to selected  ... be in edit mode, select a face, run this macro
+    JT_BL_O2S, // blender origin to selected  ... be in edit mode, select a face, run this macro
+    JT_REC, // rec macro
+    JT_PLAY, //  stoprec / play macro
+
 };
 
 // Tap Dance declarations
@@ -59,14 +63,11 @@ void matrix_scan_user(void) {
         SEQ_THREE_KEYS(KC_Q, KC_M, KC_K) {
             SEND_STRING("https://github.com/qmk/qmk_firmware/blob/master/docs");
         }
+        SEQ_TWO_KEYS(KC_K, KC_M) {
+            SEND_STRING("emo keyboards/keychron/q6/ansi/keymaps/jimmyjames85/keymap.c");
+        }
         SEQ_TWO_KEYS(KC_F, KC_M) {
             SEND_STRING("https://docs.qmk.fm/#/newbs");
-        }
-        SEQ_TWO_KEYS(KC_D, KC_D) {
-            printf("double Ds oh my !?!\n");
-        }
-        SEQ_THREE_KEYS(KC_J, KC_I, KC_M) {
-            printf("hi jim\n");
         }
     }
 
@@ -124,7 +125,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Layer 0 - Green
     [0] = LAYOUT_ansi_108(
-                          TD(TD_ESC_CAPS),            KC_F1,       KC_F2,        KC_F3,       KC_F4,                KC_F5,    KC_F6,      KC_F7,       KC_F8,             KC_F9,       KC_F10,      KC_F11,   KC_F12,           KC_PSCR,     KC_SCRL,     KC_PAUS,           OSL(1),      KC_VOLD,     KC_VOLU,     QK_LEAD,
+                          TD(TD_ESC_CAPS),            KC_F1,       KC_F2,        KC_F3,       KC_F4,                KC_F5,    KC_F6,      KC_F7,       KC_F8,             KC_F9,       KC_F10,      KC_F11,   KC_F12,           KC_PSCR,     KC_SCRL,     JT_INFO,           OSL(1),      KC_VOLD,     KC_VOLU,     QK_LEAD,
 
                           KC_GRV,         KC_1,        KC_2,        KC_3,        KC_4,        KC_5,        KC_6,        KC_7,        KC_8,        KC_9,        KC_0,       KC_MINS,     KC_EQL,              KC_BSPC,           KC_INS,      KC_HOME,     KC_PGUP,           KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,
                           KC_TAB,           KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,        KC_Y,        KC_U,        KC_I,        KC_O,        KC_P,        KC_LBRC,     KC_RBRC,          KC_BSLS,           KC_DEL,      KC_END,      KC_PGDN,           KC_P7,       KC_P8,       KC_P9,
@@ -134,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     // Layer 1 - Blue
     [1] = LAYOUT_ansi_108(
-                          JT_BOOT,         JT_BL_O2S,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     TO(0),
+                          JT_BOOT,         JT_BL_O2S,     KC_TRNS,     KC_TRNS,     KC_TRNS,                 KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           JT_REC,     JT_PLAY,     KC_TRNS,     TO(0),
 
                           TO(0),          TO(1),       TO(2),       TO(3),       KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,            KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,
                           KC_TRNS,          KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,          KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,           KC_TRNS,     KC_TRNS,     KC_TRNS,
@@ -291,12 +292,64 @@ void jtbl_originToSelected(void) {
     tap_code(KC_T);
 }
 
+
+
+// keyrecord_t record {
+//   keyevent_t event {
+//     keypos_t key {
+//       uint8_t col
+//       uint8_t row
+//     }
+//     bool     pressed
+//     uint16_t time
+//   }
+// }
+
+
+int initialized;
+
+static macro_t m1;
+void my_init(void) {
+    if (initialized == 3) {
+        return; // TODO
+    }
+
+    m1.state = MS_STOPPED;
+    m1.p = m1.records;
+
+    initialized=3;
+}
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    my_init();
+
     printKC(keycode);
     printf("kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
            keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 
     uint8_t mods;
+
+
+    uint16_t ignore[] = {OSL(1)};
+    int ignoreCount=1;
+
+
+    if (keycode == JT_REC){
+        if (!record->event.pressed) {
+            handle_macro(&m1, keycode, record, 'R', ignore, ignoreCount);
+        }
+        return false;
+    }
+    if (keycode == JT_PLAY){
+        if (!record->event.pressed) {
+            handle_macro(&m1, keycode, record, 'P', ignore, ignoreCount);
+        }
+        printf("jt_play SHOULD END\n");
+        return false;
+    }
+
+    handle_macro(&m1, keycode, record, '_', ignore, ignoreCount);
 
     switch (keycode) {
     case JT_INFO:
@@ -307,7 +360,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if(record->event.pressed) { // only once on key down
             jtbl_originToSelected();
         }
-
         return false;
     case JT_BOOT:
         // TODO verify layer?
