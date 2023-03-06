@@ -34,6 +34,9 @@ enum {
 };
 
 
+bool no_screensaver_mode = false;
+uint32_t last_activity_time = 0;
+uint32_t start_no_screensaver_mode=0;
 
 
 // KC_CODES are uint16_t
@@ -56,6 +59,8 @@ LEADER_EXTERNS();
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
 
+    //////////////////////////////////////////////////////////////////////
+    // leader send strings
     LEADER_DICTIONARY() {
         leading = false;
         leader_end();
@@ -69,7 +74,42 @@ void matrix_scan_user(void) {
         SEQ_TWO_KEYS(KC_F, KC_M) {
             SEND_STRING("https://docs.qmk.fm/#/newbs");
         }
+        SEQ_THREE_KEYS(KC_M, KC_O, KC_N) {
+            no_screensaver_mode = !no_screensaver_mode;
+            if (no_screensaver_mode){
+                start_no_screensaver_mode = timer_read32();
+                printf("no_screen_saver_mode: ON\n");
+            } else {
+                start_no_screensaver_mode = 0;
+                printf("no_screen_saver_mode: OFF\n");
+            }
+        }
     }
+
+
+    //////////////////////////////////////////////////////////////////////
+    // no_screensaver_mode
+
+    uint32_t elapsed = timer_elapsed32(last_activity_time);
+    if(no_screensaver_mode){
+        if( timer_elapsed32(start_no_screensaver_mode) > 14400000) { //  14400000 ms = 4 hours
+            no_screensaver_mode=false; // only run for 4 hours
+            printf("no_screen_saver_mode: OFF\n");
+        } else if( elapsed > 120000) { //  120000 ms = 2 mins
+            tap_code16(KC_MS_UP);
+            tap_code16(KC_MS_DOWN);
+            last_activity_time = timer_read32();
+            printf("no_screen_saver_mode OFF\n");
+            printf("move mouse\n");
+        }
+        rgb_matrix_set_color(LED_M, RGB_GREEN);
+    } else {
+        rgb_matrix_set_color(LED_M, RGB_RED);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////
+    // RGB Layer colors
 
     uint16_t leds[10]= { LED_P0, LED_P1, LED_P2,
                          LED_P3, LED_P4, LED_P5,
@@ -235,20 +275,20 @@ void tap_dance(qk_tap_dance_state_t *state, void *user_data) {
     printf("%d taps\n", state->count);
     switch (state->count) {
     case 0:
-        rgb_matrix_set_color(LED_8, 0, 0, 0);
+        rgb_matrix_set_color(LED_ESC, 0, 0, 0);
         return;
     case 1:
         tap_code(KC_ESC); // send keydown and keyup
         return;
     case 2:
         printf("mode: %d\n", rgb_matrix_get_mode());
-        rgb_matrix_set_color(LED_8, 255, 0, 0);
+        rgb_matrix_set_color(LED_ESC, 255, 0, 0);
         return;
     case 3:
-        rgb_matrix_set_color(LED_8, 0, 255, 0);
+        rgb_matrix_set_color(LED_ESC, 0, 255, 0);
         return;
     default:
-        rgb_matrix_set_color(LED_8, 0, 0, 255);
+        rgb_matrix_set_color(LED_ESC, 0, 0, 255);
         return;
     }
 }
@@ -305,7 +345,6 @@ void jtbl_originToSelected(void) {
 //   }
 // }
 
-
 int initialized;
 
 static macro_t m1;
@@ -327,6 +366,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     printKC(keycode);
     printf("kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n",
            keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+
+    // no_screensaver_mode
+    if (no_screensaver_mode) {
+        last_activity_time = timer_read32(); // reset timer if key is pressed
+    }
 
     uint8_t mods;
 
@@ -354,7 +398,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     case JT_INFO:
         printf("JT_INFO\n");
-        // rgb_matrix_set_color_all(0, 0, 0);
+        if (no_screensaver_mode) {
+            printf("\tno screen saver mode ON\n");
+        }
+        uint32_t time = timer_read32(); // read timer
+        printf("\ttimer: %lu\n", time);
         return false; // return false to stop qmk from further processing
     case JT_BL_O2S:
         if(record->event.pressed) { // only once on key down

@@ -19,3 +19,6 @@ LEADER_ENABLE = yes
 # disable rgb lighting effects and just rely on rgb_matrix calls
 RGBLIGHT_ENABLE = no
 RGB_MATRIX_ENABLE = yes
+
+# used for preventing screen saver
+MOUSEKEY_ENABLE = yes
