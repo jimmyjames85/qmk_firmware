@@ -99,7 +99,7 @@ void matrix_scan_user(void) {
             tap_code16(KC_MS_UP);
             tap_code16(KC_MS_DOWN);
             last_activity_time = timer_read32();
-            printf("no_screen_saver_mode OFF\n");
+            printf("no_screen_saver_mode: ON\n");
             printf("move mouse\n");
         }
         rgb_matrix_set_color(LED_M, RGB_GREEN);
@@ -399,10 +399,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case JT_INFO:
         printf("JT_INFO\n");
         if (no_screensaver_mode) {
-            printf("\tno screen saver mode ON\n");
+            uint32_t elapsed = timer_elapsed32(start_no_screensaver_mode);
+            printf("\tno_screen_saver_mode: ON\n");
+            printf("\tno_screen_saver_mode: %lu ms elapsed\n", elapsed);
+        } else {
+            printf("\tno_screen_saver_mode: OFF\n");
         }
-        uint32_t time = timer_read32(); // read timer
-        printf("\ttimer: %lu\n", time);
         return false; // return false to stop qmk from further processing
     case JT_BL_O2S:
         if(record->event.pressed) { // only once on key down
